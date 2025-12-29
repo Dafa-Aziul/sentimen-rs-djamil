@@ -1,0 +1,149 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto space-y-12 pb-16 animate__animated animate__fadeIn">
+    
+    <section class="text-center">
+        <h2 class="text-4xl font-black text-slate-800 mb-2">Evaluasi Performa Model</h2>
+        <div class="flex justify-center items-center gap-3">
+            <span class="px-4 py-1 bg-slate-200 text-slate-700 rounded-full text-sm font-bold">
+                Dataset: {{ metrics.total_data }} Komentar
+            </span>
+            <span class="px-4 py-1 bg-indigo-100 text-indigo-700 rounded-full text-sm font-bold">
+                Metode: TF-IDF Vectorization
+            </span>
+        </div>
+    </section>
+
+    <section class="bg-white p-8 rounded-3xl shadow-xl border border-slate-100">
+        <h3 class="text-xl font-bold text-slate-800 mb-8 flex items-center gap-2">
+            <span class="p-2 bg-indigo-500 text-white rounded-lg">📊</span> 
+            Perbandingan Akurasi Test Set
+        </h3>
+        <div class="space-y-8">
+            <div>
+                <div class="flex justify-between items-center mb-2">
+                    <span class="font-bold text-blue-600">K-Nearest Neighbors (K=11)</span>
+                    <span class="text-lg font-black text-blue-700">{{ (metrics.knn.accuracy * 100) | int }}%</span>
+                </div>
+                <div class="w-full bg-slate-100 rounded-full h-5 overflow-hidden">
+                    <div class="bg-blue-500 h-full rounded-full animate__animated animate__slideInLeft" 
+                         style="width: {{ metrics.knn.accuracy * 100 }}%;"></div>
+                </div>
+            </div>
+            <div>
+                <div class="flex justify-between items-center mb-2">
+                    <span class="font-bold text-emerald-600">Decision Tree (Depth=5)</span>
+                    <span class="text-lg font-black text-emerald-700">{{ (metrics.dt.accuracy * 100) | int }}%</span>
+                </div>
+                <div class="w-full bg-slate-100 rounded-full h-5 overflow-hidden">
+                    <div class="bg-emerald-500 h-full rounded-full animate__animated animate__slideInLeft" 
+                         style="width: {{ metrics.dt.accuracy * 100 }}%;"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    [Image of a machine learning model comparison bar chart showing accuracy percentages]
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+        
+        <div class="space-y-6">
+            <div class="bg-blue-600 p-6 rounded-3xl text-white shadow-lg relative overflow-hidden">
+                <div class="relative z-10">
+                    <h3 class="text-xl font-bold uppercase tracking-wider">K-Nearest Neighbors</h3>
+                    <p class="text-blue-100 text-sm opacity-90 italic">Best Performer on Test Set</p>
+                </div>
+                <div class="absolute -right-4 -bottom-4 text-blue-500 opacity-20 scale-150 font-black text-8xl">KNN</div>
+            </div>
+
+            <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-md">
+                <h4 class="font-bold text-slate-400 uppercase text-xs mb-4 tracking-widest">Confusion Matrix KNN</h4>
+                <div class="grid grid-cols-2 gap-3 text-center text-white">
+                    <div class="bg-blue-600 p-5 rounded-2xl shadow-sm">
+                        <span class="block text-3xl font-black">{{ metrics.knn.matrix.tn }}</span>
+                        <span class="text-[10px] font-bold uppercase opacity-80">True Negative</span>
+                    </div>
+                    <div class="bg-slate-100 p-5 rounded-2xl text-slate-400">
+                        <span class="block text-3xl font-black">{{ metrics.knn.matrix.fp }}</span>
+                        <span class="text-[10px] font-bold uppercase">False Positive</span>
+                    </div>
+                    <div class="bg-slate-100 p-5 rounded-2xl text-slate-400 border-2 border-dashed border-slate-200">
+                        <span class="block text-3xl font-black">{{ metrics.knn.matrix.fn }}</span>
+                        <span class="text-[10px] font-bold uppercase">False Negative</span>
+                    </div>
+                    <div class="bg-blue-400 p-5 rounded-2xl shadow-sm">
+                        <span class="block text-3xl font-black">{{ metrics.knn.matrix.tp }}</span>
+                        <span class="text-[10px] font-bold uppercase opacity-80">True Positive</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="space-y-6">
+            <div class="bg-emerald-600 p-6 rounded-3xl text-white shadow-lg relative overflow-hidden">
+                <div class="relative z-10">
+                    <h3 class="text-xl font-bold uppercase tracking-wider">Decision Tree</h3>
+                    <p class="text-emerald-100 text-sm opacity-90 italic">High Precision on Negatives</p>
+                </div>
+                <div class="absolute -right-4 -bottom-4 text-emerald-500 opacity-20 scale-150 font-black text-8xl">DT</div>
+            </div>
+
+            <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-md">
+                <h4 class="font-bold text-slate-400 uppercase text-xs mb-4 tracking-widest">Confusion Matrix DT</h4>
+                <div class="grid grid-cols-2 gap-3 text-center text-white">
+                    <div class="bg-emerald-600 p-5 rounded-2xl shadow-sm">
+                        <span class="block text-3xl font-black">{{ metrics.dt.matrix.tn }}</span>
+                        <span class="text-[10px] font-bold uppercase opacity-80">True Negative</span>
+                    </div>
+                    <div class="bg-slate-100 p-5 rounded-2xl text-slate-400">
+                        <span class="block text-3xl font-black">{{ metrics.dt.matrix.fp }}</span>
+                        <span class="text-[10px] font-bold uppercase">False Positive</span>
+                    </div>
+                    <div class="bg-slate-100 p-5 rounded-2xl text-slate-400">
+                        <span class="block text-3xl font-black">{{ metrics.dt.matrix.fn }}</span>
+                        <span class="text-[10px] font-bold uppercase">False Negative</span>
+                    </div>
+                    <div class="bg-emerald-400 p-5 rounded-2xl shadow-sm">
+                        <span class="block text-3xl font-black">{{ metrics.dt.matrix.tp }}</span>
+                        <span class="text-[10px] font-bold uppercase opacity-80">True Positive</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    [Image of a 2x2 confusion matrix diagram with TP, TN, FP, FN labels]
+
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="bg-slate-900 p-8 rounded-3xl text-white shadow-2xl border-b-4 border-blue-500">
+            <div class="flex items-center gap-3 mb-6">
+                <span class="p-2 bg-blue-500/20 rounded-lg text-blue-400">✨</span>
+                <h3 class="text-lg font-bold uppercase tracking-widest">Top Words (KNN - Chi2)</h3>
+            </div>
+            <div class="flex flex-wrap gap-3">
+                {% for word in metrics.knn.top_words %}
+                <span class="bg-blue-900/40 border border-blue-500/30 px-4 py-2 rounded-xl font-bold hover:bg-blue-500 hover:text-white transition cursor-default">
+                    #{{ word }}
+                </span>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="bg-slate-900 p-8 rounded-3xl text-white shadow-2xl border-b-4 border-emerald-500">
+            <div class="flex items-center gap-3 mb-6">
+                <span class="p-2 bg-emerald-500/20 rounded-lg text-emerald-400">🌿</span>
+                <h3 class="text-lg font-bold uppercase tracking-widest text-sm">Top Words (DT - Gini)</h3>
+            </div>
+            <div class="flex flex-wrap gap-3">
+                {% for item in metrics.dt.top_words %}
+                <span class="bg-emerald-900/40 border border-emerald-500/30 px-4 py-2 rounded-xl font-bold hover:bg-emerald-500 hover:text-white transition cursor-default">
+                    #{{ item.word }}
+                </span>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+</div>
+{% endblock %}

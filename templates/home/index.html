@@ -1,0 +1,112 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="space-y-20 pb-10 animate__animated animate__fadeIn">
+    
+    <section class="flex flex-col items-center text-center space-y-6 pt-10">
+        <div class="inline-flex items-center gap-2 px-4 py-2 bg-indigo-100 text-indigo-700 rounded-full text-xs font-bold tracking-widest uppercase">
+            🚀 Data Science Project
+        </div>
+        <h1 class="text-4xl md:text-6xl font-black text-slate-900 leading-tight max-w-5xl">
+            Analisis Sentimen terhadap Ulasan Pelayanan <br>
+            <span class="text-indigo-600">Rumah Sakit M. Djamil Padang</span>
+        </h1>
+        <p class="text-lg text-slate-500 max-w-2xl">
+            Studi komparasi algoritma KNN dan Decision Tree berdasarkan data ulasan Google Maps.
+        </p>
+    </section>
+
+    <section class="space-y-12">
+        <div class="text-center">
+            <h2 class="text-3xl font-black text-slate-800 italic">The Developers</h2>
+            <div class="h-1 w-20 bg-indigo-600 mx-auto mt-2 rounded-full"></div>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {% for member in team %}
+        <div
+            class="group p-8 bg-white rounded-[2.5rem] border border-slate-100 shadow-sm
+                hover:shadow-xl hover:-translate-y-2 transition-all duration-300 text-center">
+
+            <!-- FOTO SLIDER -->
+            <div class="relative w-40 h-40 mx-auto mb-6 overflow-hidden rounded-3xl">
+                <img
+                    src="{{ member.photos[0] }}"
+                    data-photos='{{ member.photos | tojson }}'
+                    class="member-photo absolute inset-0 w-full h-full object-cover
+                        transition-opacity duration-700"
+                >
+            </div>
+
+            <h4 class="text-xl font-bold text-slate-800">{{ member.name }}</h4>
+
+            <span class="inline-block mt-1 px-3 py-1 bg-slate-100 text-slate-500
+                        text-xs font-mono rounded-lg">
+                NIM: {{ member.nim }}
+            </span>
+
+            <p class="mt-4 text-sm font-medium text-indigo-600 bg-indigo-50 py-2 rounded-xl">
+                {{ member.role }}
+            </p>
+        </div>
+        {% endfor %}
+</div>
+
+    </section>
+
+    <section class="bg-slate-900 rounded-[3rem] p-12 text-white relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-64 h-64 bg-indigo-600/10 rounded-full -mr-20 -mt-20 blur-3xl"></div>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
+            <div class="space-y-6">
+                <h3 class="text-2xl font-bold">Informasi Dataset</h3>
+                <p class="text-slate-400 leading-relaxed text-sm">
+                    Model dilatih menggunakan 475 data unik yang telah melalui proses 
+                    pembesihan teks (Cleansing & Stemming) menggunakan library Sastrawi.
+                </p>
+                <div class="flex gap-10">
+                    <div>
+                        <p class="text-4xl font-black text-blue-400">93%</p>
+                        <p class="text-[10px] uppercase font-bold text-slate-500 tracking-tighter">KNN Accuracy</p>
+                    </div>
+                    <div class="border-l border-slate-800 pl-10">
+                        <p class="text-4xl font-black text-emerald-400">87%</p>
+                        <p class="text-[10px] uppercase font-bold text-slate-500 tracking-tighter">DT Accuracy</p>
+                    </div>
+                </div>
+            </div>
+            <div class="p-6 bg-slate-800/50 backdrop-blur-sm rounded-2xl border border-slate-700 font-mono text-xs text-indigo-300">
+                <p>// Model Configuration</p>
+                <p class="mt-2 text-white">KNN_K: 11 (Metric: Cosine)</p>
+                <p class="text-white">DT_Max_Depth: 5 (Min_Samples: 10)</p>
+                <p class="text-white">Total_Data: 475 Rows</p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="text-center pt-10 border-t border-slate-100">
+        <p class="text-slate-400 text-sm italic">
+            Dibuat untuk analisis ulasan Google Maps - RSUP Dr. M. Djamil Padang
+        </p>
+        <p class="text-xs text-slate-300 mt-1">© 2025 Jurusan Teknologi Informasi</p>
+    </footer>
+
+</div>
+<script>
+  document.querySelectorAll('.member-photo').forEach(img => {
+    const photos = JSON.parse(img.dataset.photos);
+    let index = 0;
+
+    // Preload gambar
+    photos.forEach(src => {
+      const preload = new Image();
+      preload.src = src;
+    });
+
+    setInterval(() => {
+      index = (index + 1) % photos.length;
+      img.src = photos[index];
+    }, 1000);
+  });
+</script>
+{% endblock %}

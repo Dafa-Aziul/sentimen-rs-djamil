@@ -1,0 +1,49 @@
+<div class="animate__animated animate__zoomIn">
+    <div class="mb-6 p-4 bg-gray-100 rounded-lg border-l-4 border-gray-400">
+        <p class="text-sm text-gray-500 uppercase font-bold tracking-wider">Komentar yang dianalisis:</p>
+        <p class="text-gray-800 italic">"{{ original }}"</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="p-6 rounded-2xl shadow-lg border-b-8 transition transform hover:scale-105 
+            {% if res_knn == 'positif' %} border-green-500 bg-green-50 {% else %} border-red-500 bg-red-50 {% endif %}">
+            <h3 class="font-bold text-gray-700">K-Nearest Neighbors</h3>
+            <div class="mt-4 flex items-center gap-3">
+                <span class="text-4xl">
+                    {% if res_knn == 'positif' %} 😊 {% else %} 😡 {% endif %}
+                </span>
+                <div>
+                    <p class="text-2xl font-black uppercase tracking-tight
+                        {% if res_knn == 'positif' %} text-green-600 {% else %} text-red-600 {% endif %}">
+                        {{ res_knn }}
+                    </p>
+                    <p class="text-xs text-gray-500">Model KNN (K=11)</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="p-6 rounded-2xl shadow-lg border-b-8 transition transform hover:scale-105 
+            {% if res_dt == 'positif' %} border-emerald-500 bg-emerald-50 {% else %} border-orange-500 bg-orange-50 {% endif %}">
+            <h3 class="font-bold text-gray-700">Decision Tree</h3>
+            <div class="mt-4 flex items-center gap-3">
+                <span class="text-4xl">
+                    {% if res_dt == 'positif' %} 👍 {% else %} 👎 {% endif %}
+                </span>
+                <div>
+                    <p class="text-2xl font-black uppercase tracking-tight
+                        {% if res_dt == 'positif' %} text-emerald-600 {% else %} text-orange-600 {% endif %}">
+                        {{ res_dt }}
+                    </p>
+                    <p class="text-xs text-gray-500">Model Decision Tree</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if res_knn != res_dt %}
+    <div class="mt-6 p-4 bg-yellow-100 text-yellow-800 rounded-xl flex items-center gap-3 animate__animated animate__headShake">
+        <span>⚠️</span>
+        <p class="text-sm font-medium">Model memiliki prediksi yang berbeda. Periksa kembali kalimat Anda atau lihat detail performa model.</p>
+    </div>
+    {% endif %}
+</div>
