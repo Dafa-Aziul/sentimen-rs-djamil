@@ -1,30 +1,76 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-<div class="max-w-3xl mx-auto">
-    <div class="bg-white p-8 rounded-2xl shadow-xl animate__animated animate__fadeInUp">
-        <h2 class="text-3xl font-bold mb-2">Analisis Sentimen</h2>
-        <p class="text-gray-500 mb-6">Masukkan komentar untuk dibandingkan oleh model KNN dan Decision Tree.</p>
-
-        <form hx-post="/predict" hx-target="#result" hx-indicator="#loading">
-            <textarea name="komentar" rows="4" 
-                class="w-full p-4 border-2 border-gray-100 rounded-xl focus:border-blue-500 focus:outline-none transition"
-                placeholder="Contoh: Pelayanannya buruk sekali dan kurang ramah..."></textarea>
-            
-            <button type="submit" 
-                class="mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition flex justify-center items-center gap-2">
-                🚀 Analisis Sekarang
-            </button>
-        </form>
-
-        <div id="loading" class="htmx-indicator mt-6">
-            <div class="flex flex-col items-center gap-2">
-                <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600"></div>
-                <p class="text-sm text-gray-500">Sastrawi sedang melakukan stemming...</p>
+<div class="max-w-3xl mx-auto px-4">
+    <div class="bg-white p-8 rounded-[2.5rem] shadow-2xl shadow-blue-100/50 border border-slate-100 animate__animated animate__fadeInUp">
+        
+        <div class="flex items-center gap-4 mb-6">
+            <div class="bg-blue-100 p-3 rounded-2xl">
+                <i data-lucide="message-square-quote" class="w-8 h-8 text-blue-600"></i>
+            </div>
+            <div>
+                <h2 class="text-3xl font-black text-slate-800 tracking-tight">Analisis Sentimen</h2>
+                <p class="text-sm text-slate-500 font-medium italic">Sentimen Pelayanan RSUP Dr. M. Djamil Padang</p>
             </div>
         </div>
 
-        <div id="result" class="mt-8"></div>
+        <p class="text-slate-600 mb-8 leading-relaxed">
+            Masukkan teks ulasan untuk membandingkan hasil klasifikasi model 
+            <span class="font-bold text-blue-600">KNN (93%)</span> dan 
+            <span class="font-bold text-emerald-600">Decision Tree (87%)</span>.
+        </p>
+
+        <form hx-post="/predict" hx-target="#result" hx-indicator="#loading" class="space-y-6">
+            <div class="relative">
+                <textarea name="komentar" rows="5" 
+                    class="w-full p-6 bg-slate-50 border-2 border-slate-100 rounded-[2rem] focus:border-blue-500 focus:bg-white focus:outline-none transition-all duration-300 text-slate-700 placeholder:text-slate-400"
+                    placeholder="Contoh: Pelayanannya sangat memuaskan, dokternya ramah dan cepat tanggap..."></textarea>
+                
+                <div class="absolute bottom-4 right-6 text-slate-300">
+                    <i data-lucide="pen-tool" class="w-5 h-5"></i>
+                </div>
+            </div>
+            
+            <button type="submit" 
+                class="group w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-4 rounded-2xl transition-all duration-300 shadow-lg shadow-blue-200 flex justify-center items-center gap-3 active:scale-95">
+                <i data-lucide="sparkles" class="w-5 h-5 group-hover:rotate-12 transition-transform"></i>
+                <span>JALANKAN ANALISIS</span>
+            </button>
+        </form>
+
+        <div id="loading" class="htmx-indicator mt-8">
+            <div class="flex flex-col items-center gap-4 p-8 bg-blue-50/50 rounded-3xl border border-dashed border-blue-200">
+                <div class="relative">
+                    <div class="animate-spin rounded-full h-12 w-12 border-4 border-blue-100 border-b-blue-600"></div>
+                    <i data-lucide="cpu" class="w-5 h-5 text-blue-600 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></i>
+                </div>
+                <div class="text-center">
+                    <p class="text-sm font-bold text-blue-800 uppercase tracking-widest">Processing Data</p>
+                    <p class="text-xs text-blue-500 mt-1">Sastrawi sedang melakukan stemming pada 475 dataset...</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="result" class="mt-8">
+            </div>
+    </div>
+
+    <div class="mt-8 flex justify-center gap-6 text-slate-400">
+        <div class="flex items-center gap-2">
+            <i data-lucide="database" class="w-4 h-4"></i>
+            <span class="text-[10px] font-bold uppercase tracking-widest">475 Reviews</span>
+        </div>
+        <div class="flex items-center gap-2">
+            <i data-lucide="shield-check" class="w-4 h-4"></i>
+            <span class="text-[10px] font-bold uppercase tracking-widest">Validated Model</span>
+        </div>
     </div>
 </div>
+
+<script>
+    // Memastikan ikon baru dimuat setelah HTMX melakukan update
+    document.body.addEventListener('htmx:afterOnLoad', function() {
+        lucide.createIcons();
+    });
+</script>
 {% endblock %}

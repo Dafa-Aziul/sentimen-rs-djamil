@@ -3,60 +3,113 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SentimenAI - KNN vs Decision Tree</title>
+    <title>Anilisis Sentimen - KNN vs Decision Tree</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <style>
         .htmx-indicator { display: none; }
         .htmx-request .htmx-indicator { display: block; }
-        .htmx-request.htmx-indicator { display: block; }
+        .sidebar-hidden { transform: translateX(-100%); }
+        .sidebar-visible { transform: translateX(0); }
+        #mobile-sidebar { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-900">
+<body class="bg-slate-50 text-slate-900">
 
-    <nav class="bg-white shadow-md p-4 sticky top-0 z-50">
+    <nav class="bg-white/80 backdrop-blur-md shadow-sm border-b border-slate-100 p-4 sticky top-0 z-50">
         <div class="container mx-auto flex justify-between items-center">
-            <h1 class="text-2xl font-bold text-blue-600 flex items-center gap-2">
-                <span>📊</span> SentimenAI
-            </h1>
-            <div class="space-x-6 font-medium">
-                <a href="/"
-                class="{% if request.path == '/' %}
-                        text-blue-600 border-b-2 border-blue-600
-                        {% else %}
-                        hover:text-blue-600
-                        {% endif %}
-                        transition pb-1">
-                    Beranda
-                </a>
+            <div class="flex items-center gap-2 text-blue-600">
+                <i data-lucide="bar-chart-3" class="w-8 h-8"></i>
+                <span class="text-2xl font-black tracking-tight">Sentimen<span class="text-slate-900">AI</span></span>
+            </div>
 
-                <a href="/analysis"
-                class="{% if request.path.startswith('/analysis') %}
-                        text-blue-600 border-b-2 border-blue-600
-                        {% else %}
-                        hover:text-blue-600
-                        {% endif %}
-                        transition pb-1">
-                    Analisis
+            <div class="hidden md:flex items-center space-x-8 font-semibold text-sm uppercase tracking-wider text-slate-600">
+                <a href="/" class="flex items-center gap-2 {% if request.path == '/' %}text-blue-600 border-b-2 border-blue-600{% else %}hover:text-blue-600{% endif %} transition pb-1">
+                    <i data-lucide="home" class="w-4 h-4"></i> Beranda
                 </a>
-
-                <a href="/performance"
-                class="{% if request.path.startswith('/performance') %}
-                        text-blue-600 border-b-2 border-blue-600
-                        {% else %}
-                        hover:text-blue-600
-                        {% endif %}
-                        transition pb-1">
-                    Performa
+                <a href="/analysis" class="flex items-center gap-2 {% if request.path.startswith('/analysis') %}text-blue-600 border-b-2 border-blue-600{% else %}hover:text-blue-600{% endif %} transition pb-1">
+                    <i data-lucide="search-code" class="w-4 h-4"></i> Analisis
+                </a>
+                <a href="/performance" class="flex items-center gap-2 {% if request.path.startswith('/performance') %}text-blue-600 border-b-2 border-blue-600{% else %}hover:text-blue-600{% endif %} transition pb-1">
+                    <i data-lucide="gauge" class="w-4 h-4"></i> Performa
                 </a>
             </div>
+
+            <button id="open-menu" class="md:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-xl transition">
+                <i data-lucide="menu" class="w-7 h-7"></i>
+            </button>
         </div>
     </nav>
 
-    <main class="container mx-auto py-10 px-4">
+    <div id="sidebar-overlay" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[60] hidden opacity-0 transition-opacity duration-300"></div>
+
+    <div id="mobile-sidebar" class="fixed top-0 left-0 w-72 h-full bg-white z-[70] shadow-2xl sidebar-hidden md:hidden flex flex-col">
+        <div class="p-6 border-b border-slate-50 flex justify-between items-center">
+            <div class="flex items-center gap-2 text-blue-600">
+                <i data-lucide="bar-chart-3" class="w-6 h-6"></i>
+                <span class="font-bold text-xl tracking-tight text-slate-900">Menu Utama</span>
+            </div>
+            <button id="close-menu" class="p-2 text-slate-400 hover:text-slate-900 transition">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+        </div>
+
+        <div class="flex flex-col p-4 space-y-2">
+            <a href="/" class="flex items-center gap-4 p-4 rounded-2xl transition {% if request.path == '/' %}bg-blue-50 text-blue-600{% else %}text-slate-600 hover:bg-slate-50{% endif %}">
+                <i data-lucide="home" class="w-5 h-5"></i>
+                <span class="font-bold text-base">Beranda</span>
+            </a>
+            <a href="/analysis" class="flex items-center gap-4 p-4 rounded-2xl transition {% if request.path.startswith('/analysis') %}bg-blue-50 text-blue-600{% else %}text-slate-600 hover:bg-slate-50{% endif %}">
+                <i data-lucide="search-code" class="w-5 h-5"></i>
+                <span class="font-bold text-base">Analisis Sentimen</span>
+            </a>
+            <a href="/performance" class="flex items-center gap-4 p-4 rounded-2xl transition {% if request.path.startswith('/performance') %}bg-blue-50 text-blue-600{% else %}text-slate-600 hover:bg-slate-50{% endif %}">
+                <i data-lucide="gauge" class="w-5 h-5"></i>
+                <span class="font-bold text-base">Performa Model</span>
+            </a>
+        </div>
+        
+        <div class="mt-auto p-8 text-center">
+            <p class="text-[10px] font-black uppercase tracking-widest text-slate-300">RSUP M. Djamil Project</p>
+        </div>
+    </div>
+
+    <main class="container mx-auto py-8 px-4">
         {% block content %}{% endblock %}
     </main>
 
+    <script>
+        // Inisialisasi Lucide Icons
+        lucide.createIcons();
+
+        const openBtn = document.getElementById('open-menu');
+        const closeBtn = document.getElementById('close-menu');
+        const sidebar = document.getElementById('mobile-sidebar');
+        const overlay = document.getElementById('sidebar-overlay');
+
+        function toggleSidebar() {
+            const isHidden = sidebar.classList.contains('sidebar-hidden');
+            
+            if (isHidden) {
+                overlay.classList.remove('hidden');
+                setTimeout(() => {
+                    overlay.classList.add('opacity-100');
+                    sidebar.classList.remove('sidebar-hidden');
+                    sidebar.classList.add('sidebar-visible');
+                }, 10);
+            } else {
+                sidebar.classList.remove('sidebar-visible');
+                sidebar.classList.add('sidebar-hidden');
+                overlay.classList.remove('opacity-100');
+                setTimeout(() => overlay.classList.add('hidden'), 300);
+            }
+        }
+
+        openBtn.addEventListener('click', toggleSidebar);
+        closeBtn.addEventListener('click', toggleSidebar);
+        overlay.addEventListener('click', toggleSidebar);
+    </script>
 </body>
 </html>
