@@ -28,7 +28,7 @@ def about():
         {
             "name": "Muhammad Dafa Aziul Ardi",
             "nim": "2311082027",
-            "role": "Programer",
+            "role": "Programmer",
             "photos": [
                 "/static/images/team/dafa1.png",
                 "/static/images/team/dafa2.png",

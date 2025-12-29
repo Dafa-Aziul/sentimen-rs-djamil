@@ -12,7 +12,7 @@
             Analisis Sentimen Ulasan <br>
             <span class="text-blue-600 flex items-center justify-center gap-4">
                 <i data-lucide="hospital" class="w-12 h-12 md:w-16 md:h-16"></i>
-                RSUD M. Djamil
+                RSUP M. Djamil
             </span>
         </h1>
         <p class="text-lg md:text-xl text-slate-500 max-w-2xl font-medium leading-relaxed">
@@ -154,12 +154,10 @@
 
         setInterval(() => {
             index = (index + 1) % photos.length;
-            img.style.opacity = '0';
             setTimeout(() => {
                 img.src = photos[index];
-                img.style.opacity = '1';
             }, 350);
-        }, 3000); // Interval diperlama sedikit agar tidak mengganggu
+        }, 2000); // Interval diperlama sedikit agar tidak mengganggu
     });
 </script>
 {% endblock %}
