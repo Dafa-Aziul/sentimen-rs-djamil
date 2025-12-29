@@ -17,12 +17,12 @@ def about():
         }
         ,{
             "name": "Andini Zakira",
-            "nim": "2311082028",
+            "nim": "2311081005",
             "role": "Data Analyst",
             "photos": [
-                "/static/images/team/anggota2_1.jpg",
-                "/static/images/team/anggota2_2.jpg", 
-                "/static/images/team/anggota2_3.jpg",
+                "/static/images/team/andini1.png",
+                "/static/images/team/andini2.png",
+                "/static/images/team/andini3.png",
             ]
         },
         {
