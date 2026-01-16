@@ -105,7 +105,6 @@
                     <div class="w-3 h-3 rounded-full bg-emerald-500/50"></div>
                 </div>
                 <div class="space-y-3">
-                    <p class="text-slate-500 italic">// Model Hyperparameters</p>
                     <p class="flex items-center gap-3">
                         <i data-lucide="settings" class="w-4 h-4 text-blue-500"></i>
                         <span class="text-blue-300">KNN_K:</span> <span class="text-white font-bold">11</span>
@@ -138,15 +137,12 @@
 </div>
 
 <script>
-    // Re-inisialisasi Lucide
     lucide.createIcons();
 
-    // Script Foto Slider (Tetap dipertahankan karena fungsinya krusial)
     document.querySelectorAll('.member-photo').forEach(img => {
         const photos = JSON.parse(img.dataset.photos);
         let index = 0;
 
-        // Preload gambar
         photos.forEach(src => {
             const preload = new Image();
             preload.src = src;
@@ -157,7 +153,7 @@
             setTimeout(() => {
                 img.src = photos[index];
             }, 350);
-        }, 2000); // Interval diperlama sedikit agar tidak mengganggu
+        }, 2000);
     });
 </script>
 {% endblock %}

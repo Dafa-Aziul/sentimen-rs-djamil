@@ -4,7 +4,6 @@ from utils.preprocessor import clean_text
 
 analysis_bp = Blueprint('analysis', __name__)
 
-# Load model pipeline (sudah termasuk TF-IDF didalamnya)
 try:
     with open('models/model_sentimen_knn.pkl', 'rb') as f:
         model_knn = pickle.load(f)
@@ -25,15 +24,13 @@ def predict():
 
     cleaned = clean_text(komentar)
     
-    # Validasi jika teks kosong setelah dibersihkan
+    
     if not cleaned.strip():
         return "<p class='text-red-500 italic'>Maaf, teks tidak mengandung kata yang dikenali model.</p>"
 
-    # Prediksi Label
     res_knn = model_knn.predict([cleaned])[0]
     res_dt = model_dt.predict([cleaned])[0]
 
-    # Ambil Skor Keyakinan (%)
     prob_knn = max(model_knn.predict_proba([cleaned])[0]) * 100
     prob_dt = max(model_dt.predict_proba([cleaned])[0]) * 100
     
